@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jumpscare Website</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      color: white;
+    }
+
+    .content {
+      text-align: center;
+      z-index: 1;
+    }
+
+    .jumpscare-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 9999;
+      flex-direction: column;
+    }
+
+    .jumpscare-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+      animation: flash 0.1s infinite alternate;
+    }
+
+    @keyframes flash {
+      0% { background-color: black; }
+      50% { background-color: white; }
+      100% { background-color: black; }
+    }
+
+    .jumpscare-image {
+      max-width: 90vw;
+      max-height: 90vh;
+      border: 5px solid white;
+      box-shadow: 0 0 30px red;
+      user-select: none;
+    }
+
+    .close-btn {
+      margin-top: 20px;
+      padding: 10px 25px;
+      font-size: 1.2rem;
+      background: red;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 0 10px darkred;
+      transition: background 0.3s ease;
+    }
+
+    .close-btn:hover {
+      background: darkred;
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <h1>Selamat datang di website ini!</h1>
+    <p>Tunggu sebentar...</p>
+  </div>
+
+  <div class="jumpscare-overlay" id="jumpscare">
+    <img 
+      src="https://i.postimg.cc/9QjTkzRY/aifaceswap-063a4c2a0fe2c118cbcb6cf0f0a15855.jpg" 
+      alt="Jumpscare Image" 
+      class="jumpscare-image" 
+      draggable="false"
+    />
+    <button class="close-btn" id="closeBtn">Tutup</button>
+  </div>
+
+  <audio id="jumpscareSound" src="https://www.myinstants.com/media/sounds/scary-sound-effect.mp3" preload="auto"></audio>
+
+  <script>
+    // Delay before jumpscare (milliseconds)
+    const delay = 5000;
+
+    const jumpscare = document.getElementById('jumpscare');
+    const closeBtn = document.getElementById('closeBtn');
+    const sound = document.getElementById('jumpscareSound');
+
+    // Show jumpscare after delay
+    setTimeout(() => {
+      jumpscare.classList.add('active');
+      sound.play().catch(() => {
+        // Autoplay might be blocked, ignore error
+      });
+    }, delay);
+
+    // Close jumpscare on button click
+    closeBtn.addEventListener('click', () => {
+      jumpscare.classList.remove('active');
+      sound.pause();
+      sound.currentTime = 0;
+    });
+
+    // Optional: close jumpscare on click outside image
+    jumpscare.addEventListener('click', (e) => {
+      if (e.target === jumpscare) {
+        jumpscare.classList.remove('active');
+        sound.pause();
+        sound.currentTime = 0;
+      }
+    });
+  </script>
+</body>
+</html>
